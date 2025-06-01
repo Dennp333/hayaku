@@ -11,7 +11,7 @@ interface Problem {
 }
 
 export default function Home() {
-  const [operations, setOperations] = useState({
+  const [operations] = useState({
     addition: true,
     subtraction: true,
     multiplication: true,
@@ -21,10 +21,10 @@ export default function Home() {
   const [wordTypes, setWordTypes] = useState<Set<string>>(new Set());
   const [forms, setForms] = useState<Set<string>>(new Set());
   const [duration, setDuration] = useState(120); // 2 minutes default
-  const [range1Start, setRange1Start] = useState(0);
-  const [range1End, setRange1End] = useState(12);
-  const [range2Start, setRange2Start] = useState(0);
-  const [range2End, setRange2End] = useState(12);
+  const [range1Start] = useState(0);
+  const [range1End] = useState(12);
+  const [range2Start] = useState(0);
+  const [range2End] = useState(12);
   const [isPlaying, setIsPlaying] = useState(false);
   
   // Game state
@@ -43,8 +43,8 @@ export default function Home() {
 
   const generateProblem = () => {
     const enabledOperations = Object.entries(operations)
-      .filter(([_, enabled]) => enabled)
-      .map(([op]) => op);
+      .filter((entry) => entry[1])
+      .map((entry) => entry[0]);
     
     if (enabledOperations.length === 0) {
       return null;
