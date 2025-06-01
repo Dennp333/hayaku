@@ -149,7 +149,7 @@ export default function Home() {
                 {['addition', 'subtraction', 'multiplication', 'division'].map((op) => (
                   <button
                     key={op}
-                    onClick={() => setOperation(op as any)}
+                    onClick={() => setOperation(op as 'addition' | 'subtraction' | 'multiplication' | 'division')}
                     className={`p-3 rounded-lg ${
                       operation === op
                         ? 'bg-blue-500 text-white'
