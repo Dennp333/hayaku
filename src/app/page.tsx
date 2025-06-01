@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
+import Menu from "./components/Menu";
 
 interface Problem {
   num1: number;
@@ -10,7 +11,15 @@ interface Problem {
 }
 
 export default function Home() {
-  const [operation, setOperation] = useState<'addition' | 'subtraction' | 'multiplication' | 'division'>('addition');
+  const [operations, setOperations] = useState({
+    addition: true,
+    subtraction: true,
+    multiplication: true,
+    division: true
+  });
+  const [genkiLessons, setGenkiLessons] = useState<Set<number>>(new Set());
+  const [wordTypes, setWordTypes] = useState<Set<string>>(new Set());
+  const [forms, setForms] = useState<Set<string>>(new Set());
   const [duration, setDuration] = useState(120); // 2 minutes default
   const [range1Start, setRange1Start] = useState(0);
   const [range1End, setRange1End] = useState(12);
@@ -25,12 +34,24 @@ export default function Home() {
   const [userAnswer, setUserAnswer] = useState('');
   const [gameHistory, setGameHistory] = useState<{problem: Problem, userAnswer: string, correct: boolean}[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [displayText, setDisplayText] = useState<'漢字' | 'ひらがな' | 'ふりがな'>('漢字');
+  const [showEnglishHints, setShowEnglishHints] = useState(false);
   
   const generateNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   const generateProblem = () => {
+    const enabledOperations = Object.entries(operations)
+      .filter(([_, enabled]) => enabled)
+      .map(([op]) => op);
+    
+    if (enabledOperations.length === 0) {
+      return null;
+    }
+
+    const operation = enabledOperations[Math.floor(Math.random() * enabledOperations.length)];
+    
     let num1 = generateNumber(range1Start, range1End);
     let num2 = generateNumber(range2Start, range2End);
     let answer: number;
@@ -137,109 +158,34 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen p-8 font-sans">
-      <main className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8">Arithmetic Game</h1>
-        
+    <div className="min-h-screen bg-white">
+      <main>
         {!isPlaying ? (
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Operation</h2>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                {['addition', 'subtraction', 'multiplication', 'division'].map((op) => (
-                  <button
-                    key={op}
-                    onClick={() => setOperation(op as 'addition' | 'subtraction' | 'multiplication' | 'division')}
-                    className={`p-3 rounded-lg ${
-                      operation === op
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 hover:bg-gray-200'
-                    }`}
-                  >
-                    {op.charAt(0).toUpperCase() + op.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Range</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">First Number</label>
-                  <div className="flex gap-2 items-center">
-                    <input
-                      type="number"
-                      value={range1Start}
-                      onChange={(e) => setRange1Start(parseInt(e.target.value))}
-                      className="w-20 p-2 border rounded"
-                    />
-                    <span>to</span>
-                    <input
-                      type="number"
-                      value={range1End}
-                      onChange={(e) => setRange1End(parseInt(e.target.value))}
-                      className="w-20 p-2 border rounded"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Second Number</label>
-                  <div className="flex gap-2 items-center">
-                    <input
-                      type="number"
-                      value={range2Start}
-                      onChange={(e) => setRange2Start(parseInt(e.target.value))}
-                      className="w-20 p-2 border rounded"
-                    />
-                    <span>to</span>
-                    <input
-                      type="number"
-                      value={range2End}
-                      onChange={(e) => setRange2End(parseInt(e.target.value))}
-                      className="w-20 p-2 border rounded"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Duration</h2>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-                {[30, 60, 120, 300, 600].map((seconds) => (
-                  <button
-                    key={seconds}
-                    onClick={() => setDuration(seconds)}
-                    className={`p-3 rounded-lg ${
-                      duration === seconds
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 hover:bg-gray-200'
-                    }`}
-                  >
-                    {seconds} sec
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button
-              onClick={startGame}
-              className="w-full py-4 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold text-lg"
-            >
-              Start Game
-            </button>
-          </div>
+          <Menu
+            genkiLessons={genkiLessons}
+            setGenkiLessons={setGenkiLessons}
+            wordTypes={wordTypes}
+            setWordTypes={setWordTypes}
+            forms={forms}
+            setForms={setForms}
+            duration={duration}
+            setDuration={setDuration}
+            displayText={displayText}
+            setDisplayText={setDisplayText}
+            showEnglishHints={showEnglishHints}
+            setShowEnglishHints={setShowEnglishHints}
+            startGame={startGame}
+          />
         ) : (
-          <div className="space-y-8">
-            <div className="flex justify-between items-center">
-              <div className="text-2xl font-bold">Score: {score}</div>
-              <div className="text-2xl font-bold">Time: {timeLeft}s</div>
+          <div className="space-y-4">
+            <div className="flex justify-between text-xl">
+              <div>Score: {score}</div>
+              <div>Time: {timeLeft}</div>
             </div>
 
             {currentProblem && (
-              <div className="text-center space-y-6">
-                <div className="text-4xl font-mono">
+              <div className="text-center">
+                <div className="text-4xl mb-4 font-mono">
                   {currentProblem.num1} {getOperationSymbol(currentProblem.operation)} {currentProblem.num2} =
                 </div>
                 <input
@@ -248,16 +194,16 @@ export default function Home() {
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  className="text-4xl w-40 p-2 border-b-2 border-gray-300 text-center focus:outline-none focus:border-blue-500"
+                  className="text-4xl w-32 p-1 border text-center"
                   autoFocus
                 />
               </div>
             )}
 
-            <div className="flex justify-center">
+            <div className="flex justify-end">
               <button
                 onClick={endGame}
-                className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                className="px-4 py-1 border border-gray-300 hover:bg-gray-50"
               >
                 End Game
               </button>
@@ -265,13 +211,12 @@ export default function Home() {
 
             {gameHistory.length > 0 && (
               <div className="mt-8">
-                <h3 className="text-xl font-semibold mb-4">Recent Problems</h3>
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {gameHistory.slice(-5).reverse().map((entry, idx) => (
                     <div
                       key={idx}
-                      className={`p-2 rounded ${
-                        entry.correct ? 'bg-green-100' : 'bg-red-100'
+                      className={`${
+                        entry.correct ? 'text-green-600' : 'text-red-600'
                       }`}
                     >
                       {entry.problem.num1} {getOperationSymbol(entry.problem.operation)} {entry.problem.num2} = {entry.userAnswer}

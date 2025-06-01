@@ -22,7 +22,7 @@ export default function Icon() {
           justifyContent: 'center',
           color: 'black',
           borderRadius: '50%',
-          aspectRatio: '1 / 1',
+          aspectRatio: 1,
           overflow: 'hidden',
         }}
       >
