@@ -1,103 +1,289 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect, useRef } from "react";
+
+interface Problem {
+  num1: number;
+  num2: number;
+  operation: string;
+  answer: number;
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [operation, setOperation] = useState<'addition' | 'subtraction' | 'multiplication' | 'division'>('addition');
+  const [duration, setDuration] = useState(120); // 2 minutes default
+  const [range1Start, setRange1Start] = useState(0);
+  const [range1End, setRange1End] = useState(12);
+  const [range2Start, setRange2Start] = useState(0);
+  const [range2End, setRange2End] = useState(12);
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Game state
+  const [timeLeft, setTimeLeft] = useState(duration);
+  const [score, setScore] = useState(0);
+  const [currentProblem, setCurrentProblem] = useState<Problem | null>(null);
+  const [userAnswer, setUserAnswer] = useState('');
+  const [gameHistory, setGameHistory] = useState<{problem: Problem, userAnswer: string, correct: boolean}[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  const generateNumber = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  const generateProblem = () => {
+    let num1 = generateNumber(range1Start, range1End);
+    let num2 = generateNumber(range2Start, range2End);
+    let answer: number;
+    
+    switch (operation) {
+      case 'addition':
+        answer = num1 + num2;
+        break;
+      case 'subtraction':
+        answer = num1 - num2;
+        break;
+      case 'multiplication':
+        answer = num1 * num2;
+        break;
+      case 'division':
+        // Ensure clean division
+        num2 = num2 === 0 ? 1 : num2;
+        num1 = num2 * generateNumber(range1Start, range1End);
+        answer = num1 / num2;
+        break;
+      default:
+        answer = 0;
+    }
+
+    return {
+      num1,
+      num2,
+      operation,
+      answer
+    };
+  };
+
+  const startGame = () => {
+    setIsPlaying(true);
+    setTimeLeft(duration);
+    setScore(0);
+    setGameHistory([]);
+    setCurrentProblem(generateProblem());
+    setUserAnswer('');
+  };
+
+  const endGame = () => {
+    setIsPlaying(false);
+    setTimeLeft(duration);
+    setCurrentProblem(null);
+    setUserAnswer('');
+  };
+
+  const checkAnswer = () => {
+    if (!currentProblem || userAnswer.trim() === '') return;
+
+    const isCorrect = parseFloat(userAnswer) === currentProblem.answer;
+    if (isCorrect) {
+      setScore(prev => prev + 1);
+    }
+
+    setGameHistory(prev => [...prev, {
+      problem: currentProblem,
+      userAnswer,
+      correct: isCorrect
+    }]);
+
+    setCurrentProblem(generateProblem());
+    setUserAnswer('');
+  };
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isPlaying && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            endGame();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isPlaying, timeLeft]);
+
+  useEffect(() => {
+    if (isPlaying && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isPlaying, currentProblem]);
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      checkAnswer();
+    }
+  };
+
+  const getOperationSymbol = (op: string) => {
+    switch (op) {
+      case 'addition': return '+';
+      case 'subtraction': return '-';
+      case 'multiplication': return '×';
+      case 'division': return '÷';
+      default: return '';
+    }
+  };
+
+  return (
+    <div className="min-h-screen p-8 font-sans">
+      <main className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold text-center mb-8">Arithmetic Game</h1>
+        
+        {!isPlaying ? (
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Operation</h2>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {['addition', 'subtraction', 'multiplication', 'division'].map((op) => (
+                  <button
+                    key={op}
+                    onClick={() => setOperation(op as any)}
+                    className={`p-3 rounded-lg ${
+                      operation === op
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 hover:bg-gray-200'
+                    }`}
+                  >
+                    {op.charAt(0).toUpperCase() + op.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Range</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">First Number</label>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="number"
+                      value={range1Start}
+                      onChange={(e) => setRange1Start(parseInt(e.target.value))}
+                      className="w-20 p-2 border rounded"
+                    />
+                    <span>to</span>
+                    <input
+                      type="number"
+                      value={range1End}
+                      onChange={(e) => setRange1End(parseInt(e.target.value))}
+                      className="w-20 p-2 border rounded"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Second Number</label>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="number"
+                      value={range2Start}
+                      onChange={(e) => setRange2Start(parseInt(e.target.value))}
+                      className="w-20 p-2 border rounded"
+                    />
+                    <span>to</span>
+                    <input
+                      type="number"
+                      value={range2End}
+                      onChange={(e) => setRange2End(parseInt(e.target.value))}
+                      className="w-20 p-2 border rounded"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Duration</h2>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+                {[30, 60, 120, 300, 600].map((seconds) => (
+                  <button
+                    key={seconds}
+                    onClick={() => setDuration(seconds)}
+                    className={`p-3 rounded-lg ${
+                      duration === seconds
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 hover:bg-gray-200'
+                    }`}
+                  >
+                    {seconds} sec
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={startGame}
+              className="w-full py-4 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold text-lg"
+            >
+              Start Game
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            <div className="flex justify-between items-center">
+              <div className="text-2xl font-bold">Score: {score}</div>
+              <div className="text-2xl font-bold">Time: {timeLeft}s</div>
+            </div>
+
+            {currentProblem && (
+              <div className="text-center space-y-6">
+                <div className="text-4xl font-mono">
+                  {currentProblem.num1} {getOperationSymbol(currentProblem.operation)} {currentProblem.num2} =
+                </div>
+                <input
+                  ref={inputRef}
+                  type="number"
+                  value={userAnswer}
+                  onChange={(e) => setUserAnswer(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="text-4xl w-40 p-2 border-b-2 border-gray-300 text-center focus:outline-none focus:border-blue-500"
+                  autoFocus
+                />
+              </div>
+            )}
+
+            <div className="flex justify-center">
+              <button
+                onClick={endGame}
+                className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              >
+                End Game
+              </button>
+            </div>
+
+            {gameHistory.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-xl font-semibold mb-4">Recent Problems</h3>
+                <div className="space-y-2">
+                  {gameHistory.slice(-5).reverse().map((entry, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-2 rounded ${
+                        entry.correct ? 'bg-green-100' : 'bg-red-100'
+                      }`}
+                    >
+                      {entry.problem.num1} {getOperationSymbol(entry.problem.operation)} {entry.problem.num2} = {entry.userAnswer}
+                      {!entry.correct && <span className="ml-2">(Correct: {entry.problem.answer})</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
