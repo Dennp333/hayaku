@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { WORD_TYPES, FORMS } from '../types/constants';
 
 interface MenuProps {
   genkiLessons: Set<number>;
@@ -15,23 +16,6 @@ interface MenuProps {
   setShowEnglishHints: Dispatch<SetStateAction<boolean>>;
   startGame: () => void;
 }
-
-const WORD_TYPES = [
-  'う-verb',
-  'る-verb',
-  'する-verb',
-  'くる-verb',
-  'い-adjective',
-  'う-adjective',
-  'irregular-adjective'
-] as const;
-
-const FORMS = [
-  'long-present',
-  'long-past',
-  'long-negative',
-  'long-past-negative'
-] as const;
 
 export default function Menu({
   genkiLessons,
