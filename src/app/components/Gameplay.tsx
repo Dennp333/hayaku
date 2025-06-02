@@ -7,6 +7,7 @@ interface GameplayProps {
   setUserAnswer: (value: string) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
   inputRef: RefObject<HTMLInputElement | null>;
+  showMistake?: boolean;
 }
 
 export default function Gameplay({
@@ -14,7 +15,8 @@ export default function Gameplay({
   userAnswer,
   setUserAnswer,
   onKeyDown,
-  inputRef
+  inputRef,
+  showMistake
 }: GameplayProps) {
   return (
     <div className="text-center">
@@ -28,7 +30,7 @@ export default function Gameplay({
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
         onKeyDown={onKeyDown}
-        className="text-4xl w-64 p-1 border text-center"
+        className={`text-4xl w-64 p-1 border text-center ${showMistake ? 'shake' : ''}`}
         autoFocus
       />
     </div>

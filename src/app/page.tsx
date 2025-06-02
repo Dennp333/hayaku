@@ -3,19 +3,25 @@
 import { useState, useEffect, useRef } from "react";
 import Menu from "./components/Menu";
 import Gameplay from "./components/Gameplay";
+import EndGame from "./components/EndGame";
 import { Word } from "./types/Word";
 import { getVocabulary } from "./lib/vocabulary";
 import { conjugate } from "./lib/conjugator/conjugate";
 import { Form } from "./types/constants";
 import { Problem } from "./types/Problem";
 
+type GameState = 'start' | 'playing' | 'end';
+
 export default function Home() {
+  // Settings
   const [genkiLessons, setGenkiLessons] = useState<Set<number>>(new Set());
   const [wordTypes, setWordTypes] = useState<Set<string>>(new Set());
   const [forms, setForms] = useState<Set<Form>>(new Set());
-  const [words, setWords] = useState<Array<Word>>([]);
+  const words = useRef<Array<Word>>([]);
   const [duration, setDuration] = useState(120); // 2 minutes default
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [gameState, setGameState] = useState<GameState>('start');
+  const [displayText, setDisplayText] = useState<'漢字' | 'ひらがな' | 'ふりがな'>('漢字');
+  const [showEnglishHints, setShowEnglishHints] = useState(false);
   
   // Game state
   const [timeLeft, setTimeLeft] = useState(duration);
@@ -23,11 +29,12 @@ export default function Home() {
   const [currentProblem, setCurrentProblem] = useState<Problem | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const [displayText, setDisplayText] = useState<'漢字' | 'ひらがな' | 'ふりがな'>('漢字');
-  const [showEnglishHints, setShowEnglishHints] = useState(false);
+  const [showMistake, setShowMistake] = useState(false);
+  const mistakes = useRef<Array<Problem>>([]);
+  const addedToMistakes = useRef(false);
 
   const generateProblem = () => {
-    const word = words[Math.floor(Math.random() * words.length)];
+    const word = words.current[Math.floor(Math.random() * words.current.length)];
     const formsArray = Array.from(forms);
     const form = formsArray[Math.floor(Math.random() * formsArray.length)];
     const answer = conjugate(word, form);
@@ -35,39 +42,48 @@ export default function Home() {
     return {
       word: word,
       form: form,
-      answer
+      answer: answer
     };
   };
 
   const startGame = () => {
     setTimeLeft(duration);
     setScore(0);
-    setWords(getVocabulary());
+    setUserAnswer('');
+    mistakes.current = [];
+    addedToMistakes.current = false;
+    words.current = getVocabulary();
+    if (words.current.length > 0) {
+      setCurrentProblem(generateProblem());
+      setGameState('playing');
+    }
   };
 
-  // Effect to handle generating the first problem when words are generated
-  useEffect(() => {
-    if (words.length > 0) {
-      setCurrentProblem(generateProblem());
-      setIsPlaying(true);
-    }
-  }, [words]);
-
   const endGame = () => {
-    setIsPlaying(false);
-    setTimeLeft(duration);
+    setGameState('end');
     setCurrentProblem(null);
-    setUserAnswer('');
+  };
+
+  const returnToMenu = () => {
+    setGameState('start');
   };
 
   const checkAnswer = () => {
-    if (!currentProblem || userAnswer.trim() === '') return;
-
+    if (!currentProblem) return;
     const isCorrect = userAnswer === currentProblem.answer;
     if (isCorrect) {
       setScore(prev => prev + 1);
       setUserAnswer('');
+      addedToMistakes.current = false;
       setCurrentProblem(generateProblem());
+    } else {
+      if (!addedToMistakes.current) {
+        mistakes.current.push(currentProblem);
+        addedToMistakes.current = true;
+      }
+      // Trigger shake animation
+      setShowMistake(true);
+      setTimeout(() => setShowMistake(false), 200);
     }
   };
 
@@ -79,7 +95,7 @@ export default function Home() {
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (isPlaying && timeLeft > 0) {
+    if (gameState === 'playing' && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -92,18 +108,18 @@ export default function Home() {
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [isPlaying, timeLeft]);
+  }, [gameState, timeLeft]);
 
   useEffect(() => {
-    if (isPlaying && inputRef.current) {
+    if (gameState === 'playing' && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isPlaying, currentProblem]);
+  }, [gameState, currentProblem]);
 
   return (
     <div className="min-h-screen bg-white">
       <main>
-        {!isPlaying ? (
+        {gameState === 'start' && (
           <Menu
             genkiLessons={genkiLessons}
             setGenkiLessons={setGenkiLessons}
@@ -119,7 +135,8 @@ export default function Home() {
             setShowEnglishHints={setShowEnglishHints}
             startGame={startGame}
           />
-        ) : (
+        )}
+        {gameState === 'playing' && (
           <div className="space-y-4">
             <div className="flex justify-between text-xl">
               <div className="p-4">Time left: {timeLeft}</div>
@@ -133,6 +150,7 @@ export default function Home() {
                 setUserAnswer={setUserAnswer}
                 onKeyDown={handleKeyDown}
                 inputRef={inputRef}
+                showMistake={showMistake}
               />
             )}
 
@@ -145,6 +163,14 @@ export default function Home() {
               </button>
             </div>
           </div>
+        )}
+        {gameState === 'end' && (
+          <EndGame
+            score={score}
+            onRestart={startGame}
+            onReturnToMenu={returnToMenu}
+            mistakes={mistakes.current}
+          />
         )}
       </main>
     </div>

@@ -29,3 +29,13 @@ body {
   font-size: 14px;
   font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.shake {
+  animation: shake 0.2s ease-in-out;
+}
