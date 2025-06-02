@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
-import { WORD_TYPES, FORMS } from '../types/constants';
+import { WORD_TYPES, FORMS, Form } from '../types/constants';
 
 interface MenuProps {
   genkiLessons: Set<number>;
   setGenkiLessons: Dispatch<SetStateAction<Set<number>>>;
   wordTypes: Set<string>;
   setWordTypes: Dispatch<SetStateAction<Set<string>>>;
-  forms: Set<string>;
-  setForms: Dispatch<SetStateAction<Set<string>>>;
+  forms: Set<Form>;
+  setForms: Dispatch<SetStateAction<Set<Form>>>;
   duration: number;
   setDuration: Dispatch<SetStateAction<number>>;
   displayText: '漢字' | 'ひらがな' | 'ふりがな';
@@ -57,7 +57,7 @@ export default function Menu({
     });
   };
 
-  const handleFormChange = (form: string) => {
+  const handleFormChange = (form: Form) => {
     setForms(prev => {
       const newSet = new Set(prev);
       if (newSet.has(form)) {
