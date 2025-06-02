@@ -27,8 +27,6 @@ export default function Home() {
   const [showEnglishHints, setShowEnglishHints] = useState(false);
 
   const generateProblem = () => {
-    if (words.length === 0 || forms.size === 0) return null;
-    
     const word = words[Math.floor(Math.random() * words.length)];
     const formsArray = Array.from(forms);
     const form = formsArray[Math.floor(Math.random() * formsArray.length)];
@@ -42,12 +40,18 @@ export default function Home() {
   };
 
   const startGame = () => {
-    setIsPlaying(true);
     setTimeLeft(duration);
     setScore(0);
     setWords(getVocabulary());
-    setCurrentProblem(generateProblem());
   };
+
+  // Effect to handle generating the first problem when words are generated
+  useEffect(() => {
+    if (words.length > 0) {
+      setCurrentProblem(generateProblem());
+      setIsPlaying(true);
+    }
+  }, [words]);
 
   const endGame = () => {
     setIsPlaying(false);
@@ -62,14 +66,13 @@ export default function Home() {
     const isCorrect = userAnswer === currentProblem.answer;
     if (isCorrect) {
       setScore(prev => prev + 1);
+      setUserAnswer('');
+      setCurrentProblem(generateProblem());
     }
-
-    setCurrentProblem(generateProblem());
-    setUserAnswer('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       checkAnswer();
     }
   };
