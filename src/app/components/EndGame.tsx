@@ -6,6 +6,7 @@ interface EndGameProps {
   onReturnToMenu: () => void;
   mistakes: Problem[];
   displayText: '漢字' | 'ひらがな';
+  showEnglishHint: boolean;
 }
 
 export default function EndGame({
@@ -13,7 +14,8 @@ export default function EndGame({
   onRestart,
   onReturnToMenu,
   mistakes,
-  displayText
+  displayText,
+  showEnglishHint
 }: EndGameProps) {
   // Deduplicate mistakes using a Map with kanji+form as key
   const uniqueMistakesMap = new Map(
@@ -55,7 +57,7 @@ export default function EndGame({
                   {problems.map((problem, index) => (
                     <div key={index} className="flex items-center justify-between border-b py-1">
                       <div>
-                        {displayText === '漢字' ? problem.word.kanji : problem.word.hiragana}
+                        {displayText === '漢字' ? problem.word.kanji : problem.word.hiragana} {showEnglishHint && `(${problem.word.english})`}
                       </div>
                       <div className="text-gray-600">
                         Answer: {displayText === '漢字' ? problem.answerKanji: problem.answerKana}

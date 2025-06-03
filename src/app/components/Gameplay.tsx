@@ -9,6 +9,7 @@ interface GameplayProps {
   inputRef: RefObject<HTMLInputElement | null>;
   showMistake?: boolean;
   displayText: '漢字' | 'ひらがな';
+  showEnglishHint: boolean;
 }
 
 export default function Gameplay({
@@ -18,12 +19,13 @@ export default function Gameplay({
   onKeyDown,
   inputRef,
   showMistake,
-  displayText
+  displayText,
+  showEnglishHint
 }: GameplayProps) {
   return (
     <div className="text-center">
       <div className="text-4xl mb-4 font-mono">
-        {displayText === '漢字' ? problem.word.kanji : problem.word.hiragana}
+        {displayText === '漢字' ? problem.word.kanji : problem.word.hiragana} {showEnglishHint && `(${problem.word.english})`}
         <div className="text-lg text-gray-600">{problem.form}</div>
       </div>
       <input

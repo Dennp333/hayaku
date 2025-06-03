@@ -20,7 +20,7 @@ export default function Home() {
   const words = useRef<Array<Word>>([]);
   const [duration, setDuration] = useState(120); // 2 minutes default
   const [gameState, setGameState] = useState<GameState>('start');
-  const [displayText, setDisplayText] = useState<'漢字' | 'ひらがな'>('漢字');
+  const [displayText, setDisplayText] = useState<'漢字' | 'ひらがな'>('ひらがな');
   const [showEnglishHints, setShowEnglishHints] = useState(false);
   
   // Game state
@@ -153,6 +153,7 @@ export default function Home() {
                 inputRef={inputRef}
                 showMistake={showMistake}
                 displayText={displayText}
+                showEnglishHint={showEnglishHints}
               />
             )}
 
@@ -173,6 +174,7 @@ export default function Home() {
             onReturnToMenu={returnToMenu}
             mistakes={mistakes.current}
             displayText={displayText}
+            showEnglishHint={showEnglishHints}
           />
         )}
       </main>
