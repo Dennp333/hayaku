@@ -1,15 +1,32 @@
 import { Word } from '../../types/Word';
 import { Form } from '../../types/constants';
 
-export function conjugate(word: Word, form: Form): string {
+interface ConjugationResult {
+  kanji: string;
+  hiragana: string;
+}
+
+export function conjugate(word: Word, form: Form): ConjugationResult {
   switch (form) {
     case Form.LongPresent:
-      return word.kanji;
+      return {
+        kanji: word.kanji,
+        hiragana: word.hiragana
+      };
     case Form.LongPast:
-      return word.kanji;
+      return {
+        kanji: word.kanji,
+        hiragana: word.hiragana
+      };
     case Form.LongNegative:
-      return word.kanji;
+      return {
+        kanji: word.kanji,
+        hiragana: word.hiragana
+      };
     case Form.LongPastNegative:
-      return word.kanji;
+      return {
+        kanji: word.kanji,
+        hiragana: word.hiragana
+      };
   }
 } 

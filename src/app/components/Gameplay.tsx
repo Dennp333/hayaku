@@ -8,6 +8,7 @@ interface GameplayProps {
   onKeyDown: (e: React.KeyboardEvent) => void;
   inputRef: RefObject<HTMLInputElement | null>;
   showMistake?: boolean;
+  displayText: '漢字' | 'ひらがな';
 }
 
 export default function Gameplay({
@@ -16,12 +17,13 @@ export default function Gameplay({
   setUserAnswer,
   onKeyDown,
   inputRef,
-  showMistake
+  showMistake,
+  displayText
 }: GameplayProps) {
   return (
     <div className="text-center">
       <div className="text-4xl mb-4 font-mono">
-        {problem.word.kanji}
+        {displayText === '漢字' ? problem.word.kanji : problem.word.hiragana}
         <div className="text-lg text-gray-600">{problem.form}</div>
       </div>
       <input

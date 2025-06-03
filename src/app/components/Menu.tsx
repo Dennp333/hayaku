@@ -10,8 +10,8 @@ interface MenuProps {
   setForms: Dispatch<SetStateAction<Set<Form>>>;
   duration: number;
   setDuration: Dispatch<SetStateAction<number>>;
-  displayText: '漢字' | 'ひらがな' | 'ふりがな';
-  setDisplayText: Dispatch<SetStateAction<'漢字' | 'ひらがな' | 'ふりがな'>>;
+  displayText: '漢字' | 'ひらがな';
+  setDisplayText: Dispatch<SetStateAction<'漢字' | 'ひらがな'>>;
   showEnglishHints: boolean;
   setShowEnglishHints: Dispatch<SetStateAction<boolean>>;
   startGame: () => void;
@@ -180,12 +180,11 @@ export default function Menu({
         <select
           id="display-text"
           value={displayText}
-          onChange={(e) => setDisplayText(e.target.value as '漢字' | 'ひらがな' | 'ふりがな')}
+          onChange={(e) => setDisplayText(e.target.value as '漢字' | 'ひらがな')}
           className="border bg-white"
         >
           <option value="漢字">漢字</option>
           <option value="ひらがな">ひらがな</option>
-          <option value="ふりがな">ふりがな</option>
         </select>
       </div>
 

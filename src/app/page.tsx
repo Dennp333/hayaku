@@ -20,7 +20,7 @@ export default function Home() {
   const words = useRef<Array<Word>>([]);
   const [duration, setDuration] = useState(120); // 2 minutes default
   const [gameState, setGameState] = useState<GameState>('start');
-  const [displayText, setDisplayText] = useState<'漢字' | 'ひらがな' | 'ふりがな'>('漢字');
+  const [displayText, setDisplayText] = useState<'漢字' | 'ひらがな'>('漢字');
   const [showEnglishHints, setShowEnglishHints] = useState(false);
   
   // Game state
@@ -42,7 +42,8 @@ export default function Home() {
     return {
       word: word,
       form: form,
-      answer: answer
+      answerKanji: answer.kanji,
+      answerKana: answer.hiragana
     };
   };
 
@@ -70,7 +71,7 @@ export default function Home() {
 
   const checkAnswer = () => {
     if (!currentProblem) return;
-    const isCorrect = userAnswer === currentProblem.answer;
+    const isCorrect = userAnswer === currentProblem.answerKanji || userAnswer === currentProblem.answerKana;
     if (isCorrect) {
       setScore(prev => prev + 1);
       setUserAnswer('');
@@ -151,6 +152,7 @@ export default function Home() {
                 onKeyDown={handleKeyDown}
                 inputRef={inputRef}
                 showMistake={showMistake}
+                displayText={displayText}
               />
             )}
 
@@ -170,6 +172,7 @@ export default function Home() {
             onRestart={startGame}
             onReturnToMenu={returnToMenu}
             mistakes={mistakes.current}
+            displayText={displayText}
           />
         )}
       </main>
