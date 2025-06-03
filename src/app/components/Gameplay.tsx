@@ -1,11 +1,10 @@
-import { RefObject, useState } from 'react';
+import { RefObject, useState, useEffect } from 'react';
 import { Problem } from '../types/Problem';
+import { bind } from 'wanakana';
 
 interface GameplayProps {
   problem: Problem;
-  userAnswer: string;
-  setUserAnswer: (value: string) => void;
-  onKeyDown: (e: React.KeyboardEvent) => void;
+  onSubmit: (e: React.KeyboardEvent) => void;
   inputRef: RefObject<HTMLInputElement | null>;
   showMistake?: boolean;
   displayText: '漢字' | 'ひらがな';
@@ -14,15 +13,19 @@ interface GameplayProps {
 
 export default function Gameplay({
   problem,
-  userAnswer,
-  setUserAnswer,
-  onKeyDown,
+  onSubmit,
   inputRef,
   showMistake,
   displayText,
   showEnglishHint
 }: GameplayProps) {
   const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      bind(inputRef.current, { IMEMode: 'toHiragana' });
+    }
+  }, [inputRef]);
 
   return (
     <div className="text-center">
@@ -46,10 +49,8 @@ export default function Gameplay({
       <input
         ref={inputRef}
         type="text"
-        value={userAnswer}
-        onChange={(e) => setUserAnswer(e.target.value)}
-        onKeyDown={onKeyDown}
         className={`text-4xl w-64 p-1 border text-center ${showMistake ? 'shake' : ''}`}
+        onKeyDown={onSubmit}
         autoFocus
       />
     </div>

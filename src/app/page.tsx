@@ -27,7 +27,6 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [score, setScore] = useState(0);
   const [currentProblem, setCurrentProblem] = useState<Problem | null>(null);
-  const [userAnswer, setUserAnswer] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const [showMistake, setShowMistake] = useState(false);
   const mistakes = useRef<Array<Problem>>([]);
@@ -50,7 +49,6 @@ export default function Home() {
   const startGame = () => {
     setTimeLeft(duration);
     setScore(0);
-    setUserAnswer('');
     mistakes.current = [];
     addedToMistakes.current = false;
     words.current = getVocabulary();
@@ -69,12 +67,14 @@ export default function Home() {
     setGameState('start');
   };
 
-  const checkAnswer = () => {
+  const checkAnswer = (answer: string) => {
     if (!currentProblem) return;
-    const isCorrect = userAnswer === currentProblem.answerKanji || userAnswer === currentProblem.answerKana;
+    const isCorrect = answer === currentProblem.answerKanji || answer === currentProblem.answerKana;
     if (isCorrect) {
       setScore(prev => prev + 1);
-      setUserAnswer('');
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
       addedToMistakes.current = false;
       setCurrentProblem(generateProblem());
     } else {
@@ -88,9 +88,9 @@ export default function Home() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
-      checkAnswer();
+  const handleSubmit = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing && inputRef.current) {
+      checkAnswer(inputRef.current.value);
     }
   };
 
@@ -147,9 +147,7 @@ export default function Home() {
             {currentProblem && (
               <Gameplay
                 problem={currentProblem}
-                userAnswer={userAnswer}
-                setUserAnswer={setUserAnswer}
-                onKeyDown={handleKeyDown}
+                onSubmit={handleSubmit}
                 inputRef={inputRef}
                 showMistake={showMistake}
                 displayText={displayText}
