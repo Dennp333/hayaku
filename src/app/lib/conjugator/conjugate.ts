@@ -1,32 +1,65 @@
 import { Word } from '../../types/Word';
 import { Form } from '../../types/constants';
+import { ConjugationResult } from '../../types/ConjugationResult';
 
-interface ConjugationResult {
-  kanji: string;
-  hiragana: string;
-}
+import { LongPresent } from './LongPresent';
+import { LongPast } from './LongPast';
+import { LongNegative } from './LongNegative';
+import { LongPastNegative } from './LongPastNegative';
+import { ShortPresent } from './ShortPresent';
+import { ShortPast } from './ShortPast';
+import { ShortNegative } from './ShortNegative';
+import { ShortPastNegative } from './ShortPastNegative';
+import { Te } from './Te';
+import { Potential } from './Potential';
+import { Volitional } from './Volitional';
+import { Ba } from './Ba';
+import { NegativeBa } from './NegativeBa';
+
+// Initialize conjugator instances
+const longPresent = new LongPresent();
+const longPast = new LongPast();
+const longNegative = new LongNegative();
+const longPastNegative = new LongPastNegative();
+const shortPresent = new ShortPresent();
+const shortPast = new ShortPast();
+const shortNegative = new ShortNegative();
+const shortPastNegative = new ShortPastNegative();
+const te = new Te();
+const potential = new Potential();
+const volitional = new Volitional();
+const ba = new Ba();
+const negativeBa = new NegativeBa();
 
 export function conjugate(word: Word, form: Form): ConjugationResult {
   switch (form) {
     case Form.LongPresent:
-      return {
-        kanji: word.kanji,
-        hiragana: word.hiragana
-      };
+      return longPresent.conjugate(word);
     case Form.LongPast:
-      return {
-        kanji: word.kanji,
-        hiragana: word.hiragana
-      };
+      return longPast.conjugate(word);
     case Form.LongNegative:
-      return {
-        kanji: word.kanji,
-        hiragana: word.hiragana
-      };
+      return longNegative.conjugate(word);
     case Form.LongPastNegative:
-      return {
-        kanji: word.kanji,
-        hiragana: word.hiragana
-      };
+      return longPastNegative.conjugate(word);
+    case Form.ShortPresent:
+      return shortPresent.conjugate(word);
+    case Form.ShortPast:
+      return shortPast.conjugate(word);
+    case Form.ShortNegative:
+      return shortNegative.conjugate(word);
+    case Form.ShortPastNegative:
+      return shortPastNegative.conjugate(word);
+    case Form.Te:
+      return te.conjugate(word);
+    case Form.Potential:
+      return potential.conjugate(word);
+    case Form.Volitional:
+      return volitional.conjugate(word);
+    case Form.Ba:
+      return ba.conjugate(word);
+    case Form.NegativeBa:
+      return negativeBa.conjugate(word);
+    default:
+      throw new Error(`Invalid form: ${form}`);
   }
 } 

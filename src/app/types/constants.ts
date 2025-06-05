@@ -12,7 +12,16 @@ export enum Form {
   LongPresent = 'long-present',
   LongPast = 'long-past',
   LongNegative = 'long-negative',
-  LongPastNegative = 'long-past-negative'
+  LongPastNegative = 'long-past-negative',
+  ShortPresent = 'short-present',
+  ShortPast = 'short-past',
+  ShortNegative = 'short-negative',
+  ShortPastNegative = 'short-past-negative',
+  Te = 'te',
+  Potential = 'potential',
+  Volitional = 'volitional',
+  Ba = 'ba',
+  NegativeBa = 'negative-ba'
 }
 
 export const WORD_TYPES = Object.values(WordType);

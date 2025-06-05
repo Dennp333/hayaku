@@ -136,7 +136,7 @@ export default function Menu({
 
       <div>
         <p className="mb-2 font-bold">Forms:</p>
-        <div className="space-y-2">
+        <div className="grid grid-cols-2 gap-4">
           {FORMS.map(form => (
             <div key={form} className="flex items-center gap-2">
               <input
