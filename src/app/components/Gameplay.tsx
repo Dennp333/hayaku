@@ -1,4 +1,4 @@
-import { RefObject, useState, useEffect } from 'react';
+import { RefObject, useEffect } from 'react';
 import { Problem } from '../types/Problem';
 import { bind } from 'wanakana';
 
