@@ -31,6 +31,7 @@ export default function Home() {
   const [showMistake, setShowMistake] = useState(false);
   const mistakes = useRef<Array<Problem>>([]);
   const addedToMistakes = useRef(false);
+  const [showHint, setShowHint] = useState(false);
 
   const generateProblem = () => {
     const word = words.current[Math.floor(Math.random() * words.current.length)];
@@ -75,6 +76,7 @@ export default function Home() {
       if (inputRef.current) {
         inputRef.current.value = '';
       }
+      setShowHint(false);
       addedToMistakes.current = false;
       setCurrentProblem(generateProblem());
     } else {
@@ -152,6 +154,8 @@ export default function Home() {
                 showMistake={showMistake}
                 displayText={displayText}
                 showEnglishHint={showEnglishHints}
+                showHint={showHint}
+                setShowHint={setShowHint}
               />
             )}
 

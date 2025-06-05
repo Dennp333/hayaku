@@ -9,6 +9,8 @@ interface GameplayProps {
   showMistake?: boolean;
   displayText: '漢字' | 'ひらがな';
   showEnglishHint: boolean;
+  showHint: boolean;
+  setShowHint: (value: boolean) => void;
 }
 
 export default function Gameplay({
@@ -17,9 +19,10 @@ export default function Gameplay({
   inputRef,
   showMistake,
   displayText,
-  showEnglishHint
+  showEnglishHint,
+  showHint,
+  setShowHint
 }: GameplayProps) {
-  const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -41,7 +44,10 @@ export default function Gameplay({
           </button>
           {showHint && (
             <span className="text-gray-800">
-              → <span className="font-bold">{problem.answerKanji}</span> <span className="font-normal">or</span> <span className="font-bold">{problem.answerKana}</span>
+              → <span className="font-bold">{problem.answerKanji}</span>
+              {problem.answerKanji !== problem.answerKana && (
+                <> <span className="font-normal">or</span> <span className="font-bold">{problem.answerKana}</span></>
+              )}
             </span>
           )}
         </div>
