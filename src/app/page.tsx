@@ -48,6 +48,12 @@ export default function Home() {
   };
 
   const startGame = () => {
+    words.current = getVocabulary(genkiLessons, wordTypes);
+    if (words.current.length === 0) {
+      alert('No words found with current settings. Please select more word types or genki lessons.');
+      return;
+    }
+
     // Save settings to localStorage
     localStorage.setItem('hayaku-settings', JSON.stringify({
       genkiLessons: Array.from(genkiLessons),
@@ -62,11 +68,8 @@ export default function Home() {
     setScore(0);
     mistakes.current = [];
     addedToMistakes.current = false;
-    words.current = getVocabulary(genkiLessons, wordTypes);
-    if (words.current.length > 0) {
-      setCurrentProblem(generateProblem());
-      setGameState('playing');
-    }
+    setCurrentProblem(generateProblem());
+    setGameState('playing');
   };
 
   const endGame = () => {
