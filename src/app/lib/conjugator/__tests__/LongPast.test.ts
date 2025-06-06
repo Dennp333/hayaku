@@ -2,9 +2,11 @@ import { Form } from '../../../types/constants';
 import { conjugate } from '../conjugate';
 import { TEST_VOCAB } from './testVocab';
 
+const form: Form = Form.LongPast;
+
 describe('LongPast Conjugation', () => {
   test('U-verb', () => {
-    const result = conjugate(TEST_VOCAB['行く'], Form.LongPast);
+    const result = conjugate(TEST_VOCAB['行く'], form);
     expect(result).toEqual({
       kanji: '行きました',
       hiragana: 'いきました'
@@ -12,7 +14,7 @@ describe('LongPast Conjugation', () => {
   });
 
   test('Ru-verb', () => {
-    const result = conjugate(TEST_VOCAB['食べる'], Form.LongPast);
+    const result = conjugate(TEST_VOCAB['食べる'], form);
     expect(result).toEqual({
       kanji: '食べました',
       hiragana: 'たべました'
@@ -20,7 +22,7 @@ describe('LongPast Conjugation', () => {
   });
 
   test('Suru-verb', () => {
-    const result = conjugate(TEST_VOCAB['する'], Form.LongPast);
+    const result = conjugate(TEST_VOCAB['する'], form);
     expect(result).toEqual({
       kanji: 'しました',
       hiragana: 'しました'
@@ -28,7 +30,7 @@ describe('LongPast Conjugation', () => {
   });
 
   test('Kuru', () => {
-    const result = conjugate(TEST_VOCAB['来る'], Form.LongPast);
+    const result = conjugate(TEST_VOCAB['来る'], form);
     expect(result).toEqual({
       kanji: '来ました',
       hiragana: 'きました'
@@ -36,7 +38,7 @@ describe('LongPast Conjugation', () => {
   });
 
   test('Kuru-verb', () => {
-    const result = conjugate(TEST_VOCAB['持ってくる'], Form.LongPast);
+    const result = conjugate(TEST_VOCAB['持ってくる'], form);
     expect(result).toEqual({
       kanji: '持ってきました',
       hiragana: 'もってきました'
@@ -44,7 +46,7 @@ describe('LongPast Conjugation', () => {
   });
 
   test('I-adjective', () => {
-    const result = conjugate(TEST_VOCAB['早い'], Form.LongPast);
+    const result = conjugate(TEST_VOCAB['早い'], form);
     expect(result).toEqual({
       kanji: '早かったです',
       hiragana: 'はやかったです'
@@ -52,7 +54,7 @@ describe('LongPast Conjugation', () => {
   });
 
   test('Na-adjective', () => {
-    const result = conjugate(TEST_VOCAB['好き'], Form.LongPast);
+    const result = conjugate(TEST_VOCAB['好き'], form);
     expect(result).toEqual({
       kanji: '好きでした',
       hiragana: 'すきでした'
@@ -60,7 +62,7 @@ describe('LongPast Conjugation', () => {
   });
 
   test('Irregular adjective', () => {
-    const result = conjugate(TEST_VOCAB['いい'], Form.LongPast);
+    const result = conjugate(TEST_VOCAB['いい'], form);
     expect(result).toEqual({
       kanji: 'よかったです',
       hiragana: 'よかったです'
