@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
-import { WORD_TYPES, FORMS, Form } from '../types/constants';
+import { WORD_TYPES, FORMS, Form, WordType } from '../types/constants';
 
 interface MenuProps {
   genkiLessons: Set<number>;
   setGenkiLessons: Dispatch<SetStateAction<Set<number>>>;
-  wordTypes: Set<string>;
-  setWordTypes: Dispatch<SetStateAction<Set<string>>>;
+  wordTypes: Set<WordType>;
+  setWordTypes: Dispatch<SetStateAction<Set<WordType>>>;
   forms: Set<Form>;
   setForms: Dispatch<SetStateAction<Set<Form>>>;
   duration: number;
@@ -45,7 +45,7 @@ export default function Menu({
     });
   };
 
-  const handleWordTypeChange = (type: string) => {
+  const handleWordTypeChange = (type: WordType) => {
     setWordTypes(prev => {
       const newSet = new Set(prev);
       if (newSet.has(type)) {
@@ -69,7 +69,7 @@ export default function Menu({
     });
   };
 
-  const isVerb = (type: string) => type.endsWith('verb');
+  const isVerb = (type: WordType) => type.endsWith('verb');
 
   return (
     <div className="bg-[#dddddd] p-8 max-w-md mx-auto space-y-4">

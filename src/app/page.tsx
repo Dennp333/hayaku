@@ -5,9 +5,9 @@ import Menu from "./components/Menu";
 import Gameplay from "./components/Gameplay";
 import EndGame from "./components/EndGame";
 import { Word } from "./types/Word";
-import { getVocabulary } from "./lib/vocabulary";
+import { getVocabulary } from "./lib/vocabulary/vocabulary";
 import { conjugate } from "./lib/conjugator/conjugate";
-import { Form } from "./types/constants";
+import { Form, WordType } from "./types/constants";
 import { Problem } from "./types/Problem";
 
 type GameState = 'start' | 'playing' | 'end';
@@ -15,7 +15,7 @@ type GameState = 'start' | 'playing' | 'end';
 export default function Home() {
   // Settings
   const [genkiLessons, setGenkiLessons] = useState<Set<number>>(new Set());
-  const [wordTypes, setWordTypes] = useState<Set<string>>(new Set());
+  const [wordTypes, setWordTypes] = useState<Set<WordType>>(new Set());
   const [forms, setForms] = useState<Set<Form>>(new Set());
   const words = useRef<Array<Word>>([]);
   const [duration, setDuration] = useState(120); // 2 minutes default
@@ -62,7 +62,7 @@ export default function Home() {
     setScore(0);
     mistakes.current = [];
     addedToMistakes.current = false;
-    words.current = getVocabulary();
+    words.current = getVocabulary(genkiLessons, wordTypes);
     if (words.current.length > 0) {
       setCurrentProblem(generateProblem());
       setGameState('playing');
