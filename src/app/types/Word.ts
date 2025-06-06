@@ -6,5 +6,4 @@ export interface Word {
   hiragana: string;
   english: string;
   genki: number;
-  jlpt: number;
 } 
