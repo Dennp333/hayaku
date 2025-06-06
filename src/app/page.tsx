@@ -48,6 +48,16 @@ export default function Home() {
   };
 
   const startGame = () => {
+    // Save settings to localStorage
+    localStorage.setItem('hayaku-settings', JSON.stringify({
+      genkiLessons: Array.from(genkiLessons),
+      wordTypes: Array.from(wordTypes),
+      forms: Array.from(forms),
+      duration,
+      displayText,
+      showEnglishHints
+    }));
+
     setTimeLeft(duration);
     setScore(0);
     mistakes.current = [];
@@ -118,6 +128,20 @@ export default function Home() {
       inputRef.current.focus();
     }
   }, [gameState, currentProblem]);
+
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const savedSettings = localStorage.getItem('hayaku-settings');
+    if (savedSettings) {
+      const settings = JSON.parse(savedSettings);
+      setGenkiLessons(new Set(settings.genkiLessons));
+      setWordTypes(new Set(settings.wordTypes));
+      setForms(new Set(settings.forms));
+      setDuration(settings.duration);
+      setDisplayText(settings.displayText);
+      setShowEnglishHints(settings.showEnglishHints);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
