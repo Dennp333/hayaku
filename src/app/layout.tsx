@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: "Hayaku - Japanese Conjugation Drill",
 };
 
+// test
+
 export default function RootLayout({
   children,
 }: Readonly<{
