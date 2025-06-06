@@ -186,7 +186,7 @@ export default function Home() {
               />
             )}
 
-            <div className="flex justify-end">
+            <div className="flex justify-end p-4">
               <button
                 onClick={endGame}
                 className="px-4 py-1 border border-gray-300 hover:bg-gray-50"
