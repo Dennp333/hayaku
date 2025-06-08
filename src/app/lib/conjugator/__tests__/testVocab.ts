@@ -121,7 +121,6 @@ export const TEST_VOCAB: Record<string, Word> = {
     english: 'to talk',
     genki: 3
   },
-
   'ある': {
     type: WordType.UVerb,
     kanji: 'ある',

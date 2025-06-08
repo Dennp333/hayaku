@@ -40,8 +40,8 @@ export class ShortPresent extends Conjugator {
 
   protected conjugateNaAdj(word: Word): ConjugationResult {
     return {
-      kanji: word.kanji,
-      hiragana: word.hiragana
+      kanji: word.kanji + "だ",
+      hiragana: word.hiragana + "だ"
     };
   }
 
