@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { WORD_TYPES, FORMS, Form, WordType } from '../types/constants';
+import { WORD_TYPES, FORMS, Form, WordType, VERB_TYPES } from '../types/constants';
 
 interface MenuProps {
   genkiLessons: Set<number>;
@@ -69,7 +69,7 @@ export default function Menu({
     });
   };
 
-  const isVerb = (type: WordType) => type.endsWith('verb');
+  const isVerb = (type: WordType) => VERB_TYPES.includes(type);
 
   return (
     <div className="bg-[#dddddd] p-8 max-w-md mx-auto space-y-4">

@@ -7,7 +7,7 @@ import EndGame from "./components/EndGame";
 import { Word } from "./types/Word";
 import { getVocabulary } from "./lib/vocabulary/vocabulary";
 import { conjugate } from "./lib/conjugator/conjugate";
-import { Form, WordType } from "./types/constants";
+import { Form, WordType, ADJECTIVE_FORMS, ADJECTIVE_TYPES} from "./types/constants";
 import { Problem } from "./types/Problem";
 
 type GameState = 'start' | 'playing' | 'end';
@@ -35,7 +35,7 @@ export default function Home() {
 
   const generateProblem = () => {
     const word = words.current[Math.floor(Math.random() * words.current.length)];
-    const formsArray = Array.from(forms);
+    const formsArray = ADJECTIVE_TYPES.includes(word.type) ? Array.from(forms).filter(form => ADJECTIVE_FORMS.includes(form)) : Array.from(forms);
     const form = formsArray[Math.floor(Math.random() * formsArray.length)];
     const answer = conjugate(word, form);
 
@@ -51,6 +51,11 @@ export default function Home() {
     words.current = getVocabulary(genkiLessons, wordTypes);
     if (words.current.length === 0) {
       alert('No words found with current settings. Please select more word types or genki lessons.');
+      return;
+    }
+
+    if (ADJECTIVE_TYPES.some(type => wordTypes.has(type)) && !ADJECTIVE_FORMS.some(form => forms.has(form))) {
+      alert('Adjectives are selected, but no selected forms apply to adjectives.');
       return;
     }
 
