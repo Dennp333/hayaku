@@ -31,15 +31,15 @@ export class Potential extends Conjugator {
     };
   }
 
-  protected conjugateIAdj(word: Word): ConjugationResult {
+  protected conjugateIAdj(_word: Word): ConjugationResult {
     throw new Error('Potential form is unavailable for adjectives');
   }
 
-  protected conjugateNaAdj(word: Word): ConjugationResult {
+  protected conjugateNaAdj(_word: Word): ConjugationResult {
     throw new Error('Potential form is unavailable for adjectives');
   }
 
-  protected conjugateIrregularAdj(word: Word): ConjugationResult {
+  protected conjugateIrregularAdj(_word: Word): ConjugationResult {
     throw new Error('Potential form is unavailable for adjectives');
   }
 } 
