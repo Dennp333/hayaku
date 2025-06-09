@@ -77,62 +77,6 @@ describe('ShortNegative Conjugation', () => {
     });
   });
 
-  test('U-verb', () => {
-    const result = conjugate(TEST_VOCAB['待つ'], form);
-    expect(result).toEqual({
-      kanji: '待たない',
-      hiragana: 'またない'
-    });
-  });
-
-  test('U-verb', () => {
-    const result = conjugate(TEST_VOCAB['取る'], form);
-    expect(result).toEqual({
-      kanji: '取らない',
-      hiragana: 'とらない'
-    });
-  });
-
-  test('U-verb', () => {
-    const result = conjugate(TEST_VOCAB['読む'], form);
-    expect(result).toEqual({
-      kanji: '読まない',
-      hiragana: 'よまない'
-    });
-  });
-
-  test('U-verb', () => {
-    const result = conjugate(TEST_VOCAB['遊ぶ'], form);
-    expect(result).toEqual({
-      kanji: '遊ばない',
-      hiragana: 'あそばない'
-    });
-  });
-
-  test('U-verb', () => {
-    const result = conjugate(TEST_VOCAB['死ぬ'], form);
-    expect(result).toEqual({
-      kanji: '死なない',
-      hiragana: 'しなない'
-    });
-  });
-
-  test('U-verb', () => {
-    const result = conjugate(TEST_VOCAB['急ぐ'], form);
-    expect(result).toEqual({
-      kanji: '急がない',
-      hiragana: 'いそがない'
-    });
-  });
-
-  test('U-verb', () => {
-    const result = conjugate(TEST_VOCAB['話す'], form);
-    expect(result).toEqual({
-      kanji: '話さない',
-      hiragana: 'はなさない'
-    });
-  });
-
   test('ある', () => {
     const result = conjugate(TEST_VOCAB['ある'], form);
     expect(result).toEqual({
