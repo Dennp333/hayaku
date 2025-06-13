@@ -74,7 +74,11 @@ export default function Menu({
   return (
     <div className="bg-[#dddddd] p-8 max-w-md mx-auto space-y-4">
       <h1 className="text-2xl font-bold">Hayaku!</h1>
-      <p>I can add some instructions here.</p>
+      <p>Select which Genki lessons to include vocabulary from, and which word types and forms to practice.
+        Try to conjugate as many words as you can!
+        <br /><br />
+        (You may type in either Japanese keyboard or romaji.)
+      </p>
 
       <div>
         <p className="mb-2 font-bold">Genki:</p>
