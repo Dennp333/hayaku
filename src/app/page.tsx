@@ -9,7 +9,7 @@ import { getVocabulary } from "./lib/vocabulary/vocabulary";
 import { conjugate } from "./lib/conjugator/conjugate";
 import { Form, WordType, ADJECTIVE_FORMS, ADJECTIVE_TYPES} from "./types/constants";
 import { Problem } from "./types/Problem";
-import { submitResult } from "./lib/api";
+import { submitResult, submitError } from "./lib/api";
 
 type GameState = 'start' | 'playing' | 'end';
 
@@ -33,6 +33,8 @@ export default function Home() {
   const mistakes = useRef<Array<Problem>>([]);
   const addedToMistakes = useRef(false);
   const [showHint, setShowHint] = useState(false);
+
+  const isDevelopment = process.env.NODE_ENV === 'development';
 
   const generateProblem = () => {
     const word = words.current[Math.floor(Math.random() * words.current.length)];
@@ -98,17 +100,21 @@ export default function Home() {
     setGameState('start');
   };
 
+  const nextProblem = () => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+    setShowHint(false);
+    addedToMistakes.current = false;
+    setCurrentProblem(generateProblem());
+  }
+
   const checkAnswer = (answer: string) => {
     if (!currentProblem) return;
     const isCorrect = answer === currentProblem.answerKanji || answer === currentProblem.answerKana;
     if (isCorrect) {
       setScore(prev => prev + 1);
-      if (inputRef.current) {
-        inputRef.current.value = '';
-      }
-      setShowHint(false);
-      addedToMistakes.current = false;
-      setCurrentProblem(generateProblem());
+      nextProblem();
     } else {
       if (!addedToMistakes.current) {
         mistakes.current.push(currentProblem);
@@ -119,6 +125,13 @@ export default function Home() {
       setTimeout(() => setShowMistake(false), 200);
     }
   };
+
+  const reportError = () => {
+    if (!currentProblem) return;
+    submitError(currentProblem);
+    alert('Error reported. Thank you!');
+    nextProblem();
+  }
 
   const handleSubmit = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing && inputRef.current) {
@@ -203,11 +216,19 @@ export default function Home() {
 
             <div className="flex justify-end p-4">
               <button
-                onClick={endGame}
+                onClick={reportError}
                 className="px-4 py-1 border border-gray-300 hover:bg-gray-50"
               >
-                End Game
+                Report Error
               </button>
+              {isDevelopment && (
+                <button
+                  onClick={endGame}
+                  className="px-4 py-1 border border-gray-300 hover:bg-gray-50"
+                >
+                  End Game
+                </button>
+              )}
             </div>
           </div>
         )}

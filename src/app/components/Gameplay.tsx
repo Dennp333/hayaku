@@ -55,7 +55,7 @@ export default function Gameplay({
       <input
         ref={inputRef}
         type="text"
-        className={`text-4xl w-64 p-1 border text-center ${showMistake ? 'shake' : ''}`}
+        className={`text-4xl w-96 p-1 border text-center ${showMistake ? 'shake' : ''}`}
         onKeyDown={onSubmit}
         autoFocus
       />
