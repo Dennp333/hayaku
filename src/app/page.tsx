@@ -9,6 +9,7 @@ import { getVocabulary } from "./lib/vocabulary/vocabulary";
 import { conjugate } from "./lib/conjugator/conjugate";
 import { Form, WordType, ADJECTIVE_FORMS, ADJECTIVE_TYPES} from "./types/constants";
 import { Problem } from "./types/Problem";
+import { submitResult } from "./lib/api";
 
 type GameState = 'start' | 'playing' | 'end';
 
@@ -80,6 +81,17 @@ export default function Home() {
   const endGame = () => {
     setGameState('end');
     setCurrentProblem(null);
+    submitResult({
+      numGenkiLessons: genkiLessons.size,
+      maxGenkiLesson: Math.max(...genkiLessons),
+      wordTypes: Array.from(wordTypes),
+      forms: Array.from(forms),
+      duration: duration,
+      score: score,
+      mistakes: mistakes.current,
+      showEnglishHints: showEnglishHints,
+      displayText: displayText
+    });
   };
 
   const returnToMenu = () => {
@@ -118,14 +130,12 @@ export default function Home() {
     let timer: NodeJS.Timeout;
     if (gameState === 'playing' && timeLeft > 0) {
       timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            endGame();
-            return 0;
-          }
-          return prev - 1;
-        });
+        if (timeLeft <= 1) {
+          clearInterval(timer);
+          endGame();
+        } else {
+          setTimeLeft(prev => prev - 1);
+        }
       }, 1000);
     }
     return () => clearInterval(timer);
