@@ -150,7 +150,7 @@ export const l7Vocab: Record<WordType, Word[]> = {
     {
       type: WordType.IrregularAdj,
       kanji: '頭がいい',
-      hiragana: 'あだがいい',
+      hiragana: 'あたまがいい',
       english: 'smart',
       genki: 7
     },
