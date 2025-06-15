@@ -111,7 +111,7 @@ export const l7Vocab: Record<WordType, Word[]> = {
     {
       type: WordType.IAdj,
       kanji: '背が高い',
-      hiragana: '背がたかい',
+      hiragana: 'せがたかい',
       english: 'tall (stature)',
       genki: 7
     },

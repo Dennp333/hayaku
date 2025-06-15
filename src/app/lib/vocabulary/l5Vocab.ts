@@ -217,7 +217,7 @@ export const l5Vocab: Record<WordType, Word[]> = {
   ],
   [WordType.IrregularAdj]: [
     {
-      type: WordType.IAdj,
+      type: WordType.IrregularAdj,
       kanji: 'かっこいい',
       hiragana: 'かっこいい',
       english: 'good looking',
