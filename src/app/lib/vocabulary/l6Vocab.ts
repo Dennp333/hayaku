@@ -141,7 +141,7 @@ export const l6Vocab: Record<WordType, Word[]> = {
     {
       type: WordType.RuVerb,
       kanji: 'シャワーを浴びる',
-      hiragana: 'シャワーをあびる',
+      hiragana: 'しゃわーをあびる',
       english: 'to take a shower',
       genki: 6
     },

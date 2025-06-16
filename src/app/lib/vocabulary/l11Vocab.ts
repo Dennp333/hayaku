@@ -27,7 +27,7 @@ export const l11Vocab: Record<WordType, Word[]> = {
     {
       type: WordType.UVerb,
       kanji: 'サボる',
-      hiragana: 'サボる',
+      hiragana: 'さぼる',
       english: 'to cut (classes)',
       genki: 11
     },
@@ -87,7 +87,7 @@ export const l11Vocab: Record<WordType, Word[]> = {
     {
       type: WordType.SuruVerb,
       kanji: 'ダイエットする',
-      hiragana: 'ダイエットする',
+      hiragana: 'だいえっとする',
       english: 'to go on a diet',
       genki: 11
     },
