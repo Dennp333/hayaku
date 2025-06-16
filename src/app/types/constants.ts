@@ -21,7 +21,8 @@ export enum Form {
   Potential = 'potential',
   Volitional = 'volitional',
   Ba = 'ba',
-  NegativeBa = 'negative-ba'
+  NegativeBa = 'negative-ba',
+  Passive = 'passive',
 }
 
 export const WORD_TYPES = Object.values(WordType);
