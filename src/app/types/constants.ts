@@ -23,6 +23,7 @@ export enum Form {
   Ba = 'ba',
   NegativeBa = 'negative-ba',
   Passive = 'passive',
+  Causative = 'causative',
 }
 
 export const WORD_TYPES = Object.values(WordType);
