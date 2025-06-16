@@ -17,6 +17,7 @@ import { Ba } from './Ba';
 import { NegativeBa } from './NegativeBa';
 import { Passive } from './Passive';
 import { Causative } from './Causative';
+import { CausativePassive } from './CausativePassive';
 
 // Initialize conjugator instances
 const longPresent = new LongPresent();
@@ -34,6 +35,7 @@ const ba = new Ba();
 const negativeBa = new NegativeBa();
 const passive = new Passive();
 const causative = new Causative();
+const causativePassive = new CausativePassive();
 
 export function conjugate(word: Word, form: Form): ConjugationResult {
   switch (form) {
@@ -67,6 +69,8 @@ export function conjugate(word: Word, form: Form): ConjugationResult {
       return passive.conjugate(word);
     case Form.Causative:
       return causative.conjugate(word);
+    case Form.CausativePassive:
+      return causativePassive.conjugate(word);
     default:
       throw new Error(`Invalid form: ${form}`);
   }
