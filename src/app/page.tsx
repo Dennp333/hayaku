@@ -74,6 +74,7 @@ export default function Home() {
 
     setTimeLeft(duration);
     setScore(0);
+    setShowHint(false);
     mistakes.current = [];
     addedToMistakes.current = false;
     setCurrentProblem(generateProblem());
