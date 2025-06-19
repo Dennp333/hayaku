@@ -7,7 +7,7 @@ import EndGame from "./components/EndGame";
 import { Word } from "./types/Word";
 import { getVocabulary } from "./lib/vocabulary/vocabulary";
 import { conjugate } from "./lib/conjugator/conjugate";
-import { Form, WordType, ADJECTIVE_FORMS, ADJECTIVE_TYPES} from "./types/constants";
+import { Form, WordType, ADJECTIVE_FORMS, ADJECTIVE_TYPES, WORD_TYPES, FORMS} from "./types/constants";
 import { Problem } from "./types/Problem";
 import { submitResult, submitError } from "./lib/api";
 
@@ -172,6 +172,10 @@ export default function Home() {
       setDuration(settings.duration);
       setDisplayText(settings.displayText);
       setShowEnglishHints(settings.showEnglishHints);
+    } else {
+      setGenkiLessons(new Set(Array.from({ length: 23 }, (_, i) => i + 1)));
+      setWordTypes(new Set(WORD_TYPES));
+      setForms(new Set(FORMS));
     }
   }, []);
 
