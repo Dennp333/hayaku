@@ -107,15 +107,15 @@ export const l19Vocab: Record<WordType, Word[]> = {
     },
   ],
   [WordType.KuruVerb]: [],
-  [WordType.IAdj]: [
+  [WordType.IAdj]: [],
+  [WordType.NaAdj]: [],
+  [WordType.IrregularAdj]: [
     {
-      type: WordType.IAdj,
+      type: WordType.IrregularAdj,
       kanji: '仲がいい',
       hiragana: 'なかがいい',
       english: 'friendly',
       genki: 19
     },
   ],
-  [WordType.NaAdj]: [],
-  [WordType.IrregularAdj]: [],
 }; 
