@@ -126,15 +126,16 @@ export const l23Vocab: Record<WordType, Word[]> = {
       english: 'to win a championship',
       genki: 23
     },
+  ],
+  [WordType.KuruVerb]: [
     {
-      type: WordType.SuruVerb,
+      type: WordType.KuruVerb,
       kanji: '戻ってくる',
       hiragana: 'もどってくる',
       english: 'comes back',
       genki: 23
     },
   ],
-  [WordType.KuruVerb]: [],
   [WordType.IAdj]: [
     {
       type: WordType.IAdj,
