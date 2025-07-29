@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { WORD_TYPES, FORMS, Form, WordType, VERB_TYPES } from '../types/constants';
+import { WORD_TYPES, FORMS, Form, WordType, VERB_TYPES, INFINITE_TIME } from '../types/constants';
 
 interface MenuProps {
   genkiLessons: Set<number>;
@@ -204,7 +204,7 @@ export default function Menu({
           <option value="60">60 seconds</option>
           <option value="120">120 seconds</option>
           <option value="180">180 seconds</option>
-          <option value="240">240 seconds</option>
+          <option value={INFINITE_TIME}>Infinite</option>
         </select>
       </div>
 

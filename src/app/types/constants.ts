@@ -32,3 +32,4 @@ export const FORMS = Object.values(Form);
 export const ADJECTIVE_TYPES = [WordType.IAdj, WordType.NaAdj, WordType.IrregularAdj];
 export const VERB_TYPES = [WordType.UVerb, WordType.RuVerb, WordType.SuruVerb, WordType.KuruVerb];
 export const ADJECTIVE_FORMS = [Form.LongPresent, Form.LongPast, Form.LongNegative, Form.LongPastNegative, Form.ShortPresent, Form.ShortPast, Form.ShortNegative, Form.ShortPastNegative, Form.Te];
+export const INFINITE_TIME = -1;

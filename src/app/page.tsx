@@ -7,7 +7,7 @@ import EndGame from "./components/EndGame";
 import { Word } from "./types/Word";
 import { getVocabulary } from "./lib/vocabulary/vocabulary";
 import { conjugate } from "./lib/conjugator/conjugate";
-import { Form, WordType, ADJECTIVE_FORMS, ADJECTIVE_TYPES, WORD_TYPES, FORMS} from "./types/constants";
+import { Form, WordType, ADJECTIVE_FORMS, ADJECTIVE_TYPES, WORD_TYPES, FORMS, INFINITE_TIME} from "./types/constants";
 import { Problem } from "./types/Problem";
 import { submitResult, submitError } from "./lib/api";
 
@@ -143,6 +143,7 @@ export default function Home() {
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (gameState === 'playing' && timeLeft > 0) {
+      // When duration is set to infinite, timeLeft < 0 and we never enter this block
       timer = setInterval(() => {
         if (timeLeft <= 1) {
           clearInterval(timer);
@@ -202,7 +203,7 @@ export default function Home() {
         {gameState === 'playing' && (
           <div className="space-y-4">
             <div className="flex justify-between text-xl">
-              <div className="p-4">Time left: {timeLeft}</div>
+              <div className="p-4">Time left: {timeLeft === INFINITE_TIME ? 'Infinite' : timeLeft}</div>
               <div className="p-4">Score: {score}</div>
             </div>
 
