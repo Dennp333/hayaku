@@ -227,7 +227,7 @@ export default function Home() {
               >
                 Report Error
               </button>
-              {isDevelopment && (
+              {(isDevelopment || duration === INFINITE_TIME) && (
                 <button
                   onClick={endGame}
                   className="px-4 py-1 border border-gray-300 hover:bg-gray-50"
